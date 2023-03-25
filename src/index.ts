@@ -16,8 +16,8 @@ const plugin: JupyterFrontEndPlugin<void> = {
     console.log('JupyterLab extension jupyterlab-daw is activated!');
 
     const meter = new MeterWidget();
-    meter.id = "jp-audioMeter";
-    app.shell.add(meter, "top", { rank: 1000 });
+    meter.id = 'jp-audioMeter';
+    app.shell.add(meter, 'top', { rank: 1000 });
   }
 };
 

@@ -10,7 +10,7 @@ export class Meter extends ReactWidget {
    */
   constructor(options: Meter.IOptions) {
     super();
-    this.addClass('jp-daw-MeterWidget');
+    this.addClass('jp-daw-Meter');
     this.width = options.width;
     this.height = options.height;
     this.orientation = options.orientation || 'vertical';

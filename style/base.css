@@ -4,11 +4,11 @@
     https://jupyterlab.readthedocs.io/en/stable/developer/css.html
 */
 
-.daw-meter {
-  border: var(--jp-border-width) solid var(--jp-border-color0);
+.jp-daw-Meter {
+  background-color: var(--jp-layout-color2);
 }
 
-.jp-daw-MeterWidget {
+.jp-daw-TopBar {
   display: flex;
   flex-grow: 1 !important;
   min-height: unset !important;
@@ -16,18 +16,18 @@
   border-bottom: var(--jp-border-width) solid var(--jp-border-color0);
 }
 
-/* .jp-daw-MeterWidget > div { */
+.jp-daw-LabShell[data-shell-mode='single-document'] .jp-daw-TopBar {
+  border-bottom: unset;
+}
 
-/*   display: flex; */
+.jp-daw-TopBar > .jp-daw-TopBar-item {
+  display: flex;
+  flex-direction: column;
+  justify-content: left;
+  margin-left: 5px !important;
+  margin-right: 5px !important;
+}
 
-/*   flex-direction: column; */
-
-/*   justify-content: center; */
-
-/*   border-left: calc(var(--jp-border-width) * 2) solid var(--jp-border-color0); */
-
-/*   padding-left: 5px !important; */
-
-/*   padding-right: 5px !important; */
-
-/* } */
+.jp-Toolbar.jp-daw-TopBar {
+  box-shadow: unset;
+}

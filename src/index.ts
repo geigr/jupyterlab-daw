@@ -3,7 +3,7 @@ import {
   JupyterFrontEndPlugin
 } from '@jupyterlab/application';
 
-import { MeterWidget } from './components/meter';
+import { Meter } from './widgets';
 
 /**
  * Initialization data for the jupyterlab-daw extension.
@@ -13,10 +13,8 @@ const plugin: JupyterFrontEndPlugin<void> = {
   autoStart: true,
   requires: [],
   activate: (app: JupyterFrontEnd) => {
-    console.log('JupyterLab extension jupyterlab-daw is activated!');
-
-    const meter = new MeterWidget();
-    meter.id = 'jp-audioMeter';
+    const meter = new Meter({ width: 60, height: 15, fps: 20, orientation: 'horizontal' });
+    meter.id = 'jp-daw-topbar-meter';
     app.shell.add(meter, 'top', { rank: 1000 });
   }
 };

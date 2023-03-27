@@ -1,49 +1,32 @@
-import { ReactWidget } from '@jupyterlab/apputils';
-
 import React, { useEffect, useRef } from 'react';
 
-import { Meter, getDestination } from 'tone';
+import { Meter as ToneMeter, getDestination } from 'tone';
 
-/**
- * Reusable Reacrt Hook for setting animation frames.
- *
- * Based on https://github.com/franciscop/use-animation-frame (MIT License).
- */
-export const useAnimationFrame = (
-  callback: { (): void },
-  fps: number
-): void => {
-  const frameRef = useRef<number>(0);
-  const prevRef = useRef<number>(-1);
+import { useAnimationFrame } from '../util/animation';
 
-  const animate = () => {
-    const now = performance.now();
-    const delta = now - prevRef.current;
-    if (prevRef.current === -1 || delta > 1000 / fps) {
-      callback();
-      prevRef.current = now;
-    }
-    frameRef.current = requestAnimationFrame(animate);
-  };
+export type MeterOrientation = 'horizontal' | 'vertical';
 
-  useEffect(() => {
-    frameRef.current = requestAnimationFrame(animate);
-    return () => cancelAnimationFrame(frameRef.current);
-  });
-};
-
-type MeterOptions = {
+export type MeterProps = {
   width: number;
   height: number;
-  fps: number;
-  thresholdValue: number;
+  orientation?: MeterOrientation;
+  fps?: number;
+  thresholdValue?: number;
 };
 
 /**
- * Stereo audio meter visualizer.
+ * Audio meter visualizer.
  */
-const MeterComponent = (opts: MeterOptions): JSX.Element => {
-  const meterRef = useRef<Meter>(new Meter({ normalRange: true, channels: 2 }));
+export const Meter: React.FC<MeterProps> = ({
+  width,
+  height,
+  orientation = 'vertical',
+  fps = 30,
+  thresholdValue = 0.01
+}): JSX.Element => {
+  const meterRef = useRef<ToneMeter>(
+    new ToneMeter({ normalRange: true, channels: 2 })
+  );
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
   useEffect(() => {
@@ -63,22 +46,28 @@ const MeterComponent = (opts: MeterOptions): JSX.Element => {
 
   const render = (ctx: CanvasRenderingContext2D) => {
     const root = getComputedStyle(document.documentElement);
-    ctx.clearRect(0, 0, opts.width, opts.height);
+    ctx.clearRect(0, 0, width, height);
 
     const valueLR = meterRef.current.getValue() as number[];
 
-    const thresh = opts.thresholdValue;
+    const thresh = thresholdValue;
     if (valueLR[0] < thresh && valueLR[1] < thresh) {
       return;
     }
 
-    const widthL = Math.pow(valueLR[0], 0.5) * opts.width;
-    const widthR = Math.pow(valueLR[1], 0.5) * opts.width;
+    const levelL = Math.pow(valueLR[0], 0.5) * width;
+    const levelR = Math.pow(valueLR[1], 0.5) * width;
 
     const color = root.getPropertyValue('--jp-brand-color1');
     ctx.fillStyle = color;
-    ctx.fillRect(0, 0, widthL, opts.height / 2);
-    ctx.fillRect(0, opts.height / 2, widthR, opts.height);
+
+    if (orientation === 'horizontal') {
+      ctx.fillRect(0, 0, levelL, height / 2);
+      ctx.fillRect(0, height / 2, levelR, height);
+    } else {
+      ctx.fillRect(0, height, width / 2, -levelL);
+      ctx.fillRect(width / 2, height, width, -levelR);
+    }
   };
 
   useAnimationFrame(() => {
@@ -88,32 +77,11 @@ const MeterComponent = (opts: MeterOptions): JSX.Element => {
         render(context);
       }
     }
-  }, opts.fps);
+  }, fps);
 
   return (
     <div>
-      <canvas ref={canvasRef} height={opts.height} width={opts.width} />
+      <canvas ref={canvasRef} height={height} width={width} />
     </div>
   );
 };
-
-MeterComponent.defaultProps = {
-  width: 60,
-  height: 15,
-  fps: 20,
-  thresholdValue: 0.01
-};
-
-export class MeterWidget extends ReactWidget {
-  /**
-   * Constructs a new CounterWidget.
-   */
-  constructor() {
-    super();
-    this.addClass('jp-MeterWidget');
-  }
-
-  render(): JSX.Element {
-    return <MeterComponent />;
-  }
-}

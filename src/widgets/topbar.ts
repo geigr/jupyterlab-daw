@@ -1,8 +1,9 @@
-import { Toolbar } from '@jupyterlab/apputils';
+import { Toolbar, ToolbarButton } from '@jupyterlab/apputils';
 
 import { Widget } from '@lumino/widgets';
 
 import { Meter } from './meter';
+import { speakerIcon, muteIcon } from '../iconimports';
 
 const TOPBAR_CLASS = 'jp-daw-TopBar';
 const CONTENT_CLASS = 'jp-daw-TopBar-item';
@@ -19,6 +20,16 @@ export class TopBar extends Toolbar<Widget> {
       orientation: 'horizontal'
     });
     this.addItem('jp-daw-topbar-meter', meter);
+
+    const toggleMute = new ToolbarButton({
+      icon: speakerIcon,
+      pressedIcon: muteIcon,
+      onClick: () => {
+      },
+      tooltip: 'mute',
+      pressedTooltip: 'unmute'
+    });
+    this.addItem('toggle-mute', toggleMute)
   }
 
   addItem(name: string, item: Widget): boolean {

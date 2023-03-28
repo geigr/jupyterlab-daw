@@ -14,6 +14,7 @@
   min-height: unset !important;
   height: var(--jp-private-menubar-height);
   border-bottom: var(--jp-border-width) solid var(--jp-border-color0);
+  justify-content: right;
 }
 
 .jp-daw-LabShell[data-shell-mode='single-document'] .jp-daw-TopBar {

@@ -45,9 +45,6 @@ export const Meter: React.FC<MeterProps> = ({
     };
   }, []);
 
-  const render = useCallback((ctx: CanvasRenderingContext2D) => {
-    const root = getComputedStyle(document.documentElement);
-    ctx.clearRect(0, 0, width, height);
   useEffect(() => {
     const meter = meterRef.current;
     inputNode.connect(meter);
@@ -57,27 +54,34 @@ export const Meter: React.FC<MeterProps> = ({
     };
   }, [inputNode]);
 
-    const valueLR = meterRef.current.getValue() as number[];
+  const render = useCallback(
+    (ctx: CanvasRenderingContext2D) => {
+      const root = getComputedStyle(document.documentElement);
+      ctx.clearRect(0, 0, width, height);
 
-    const thresh = thresholdValue;
-    if (valueLR[0] < thresh && valueLR[1] < thresh) {
-      return;
-    }
+      const valueLR = meterRef.current.getValue() as number[];
 
-    const levelL = Math.pow(valueLR[0], 0.5) * width;
-    const levelR = Math.pow(valueLR[1], 0.5) * width;
+      const thresh = thresholdValue;
+      if (valueLR[0] < thresh && valueLR[1] < thresh) {
+        return;
+      }
 
-    const color = root.getPropertyValue('--jp-brand-color1');
-    ctx.fillStyle = color;
+      const levelL = Math.pow(valueLR[0], 0.5) * width;
+      const levelR = Math.pow(valueLR[1], 0.5) * width;
 
-    if (orientation === 'horizontal') {
-      ctx.fillRect(0, 0, levelL, height / 2);
-      ctx.fillRect(0, height / 2, levelR, height);
-    } else {
-      ctx.fillRect(0, height, width / 2, -levelL);
-      ctx.fillRect(width / 2, height, width, -levelR);
-    }
-  }, []);
+      const color = root.getPropertyValue('--jp-brand-color1');
+      ctx.fillStyle = color;
+
+      if (orientation === 'horizontal') {
+        ctx.fillRect(0, 0, levelL, height / 2);
+        ctx.fillRect(0, height / 2, levelR, height);
+      } else {
+        ctx.fillRect(0, height, width / 2, -levelL);
+        ctx.fillRect(width / 2, height, width, -levelR);
+      }
+    },
+    [width, height, orientation, thresholdValue]
+  );
 
   useAnimationFrame(() => {
     if (canvasRef.current) {

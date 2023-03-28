@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useRef } from 'react';
+import { useEffect, useRef } from 'react';
 
 /**
  * Reusable React Hook for setting animation frames.
@@ -12,7 +12,7 @@ export const useAnimationFrame = (
   const frameRef = useRef<number>(0);
   const prevRef = useRef<number>(-1);
 
-  const animate = useCallback(() => {
+  const animate = () => {
     const now = performance.now();
     const delta = now - prevRef.current;
     if (prevRef.current === -1 || delta > 1000 / fps) {
@@ -20,7 +20,7 @@ export const useAnimationFrame = (
       prevRef.current = now;
     }
     frameRef.current = requestAnimationFrame(animate);
-  }, []);
+  };
 
   useEffect(() => {
     frameRef.current = requestAnimationFrame(animate);

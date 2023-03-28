@@ -27,12 +27,11 @@ export class TopBar extends Toolbar<Widget> {
     const toggleMute = new ToolbarButton({
       icon: speakerIcon,
       pressedIcon: muteIcon,
-      onClick: () => {
-      },
+      //onClick: () => {},
       tooltip: 'mute',
       pressedTooltip: 'unmute'
     });
-    this.addItem('toggle-mute', toggleMute)
+    this.addItem('toggle-mute', toggleMute);
   }
 
   addItem(name: string, item: Widget): boolean {

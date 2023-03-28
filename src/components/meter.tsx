@@ -1,12 +1,13 @@
 import React, { useCallback, useEffect, useRef } from 'react';
 
-import { Meter as ToneMeter, getDestination } from 'tone';
+import { Meter as ToneMeter, ToneAudioNode } from 'tone';
 
 import { useAnimationFrame } from '../util/animation';
 
 export type MeterOrientation = 'horizontal' | 'vertical';
 
 export type MeterProps = {
+  inputNode: ToneAudioNode;
   width: number;
   height: number;
   orientation?: MeterOrientation;
@@ -18,6 +19,7 @@ export type MeterProps = {
  * Audio meter visualizer.
  */
 export const Meter: React.FC<MeterProps> = ({
+  inputNode,
   width,
   height,
   orientation = 'vertical',
@@ -37,7 +39,6 @@ export const Meter: React.FC<MeterProps> = ({
     meter.smoothing = 0;
     // display 2 channels even when a mono signal goes through destination
     meter.channelCountMode = 'explicit';
-    getDestination().connect(meter);
 
     return () => {
       meter.dispose();
@@ -47,6 +48,14 @@ export const Meter: React.FC<MeterProps> = ({
   const render = useCallback((ctx: CanvasRenderingContext2D) => {
     const root = getComputedStyle(document.documentElement);
     ctx.clearRect(0, 0, width, height);
+  useEffect(() => {
+    const meter = meterRef.current;
+    inputNode.connect(meter);
+
+    return () => {
+      inputNode.disconnect(meter);
+    };
+  }, [inputNode]);
 
     const valueLR = meterRef.current.getValue() as number[];
 

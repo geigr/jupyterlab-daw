@@ -2,6 +2,8 @@ import { Toolbar, ToolbarButton } from '@jupyterlab/apputils';
 
 import { Widget } from '@lumino/widgets';
 
+import { getDestination } from 'tone';
+
 import { Meter } from './meter';
 import { speakerIcon, muteIcon } from '../iconimports';
 
@@ -14,6 +16,7 @@ export class TopBar extends Toolbar<Widget> {
     this.addClass(TOPBAR_CLASS);
 
     const meter = new Meter({
+      inputNode: getDestination(),
       width: 60,
       height: 23,
       fps: 20,

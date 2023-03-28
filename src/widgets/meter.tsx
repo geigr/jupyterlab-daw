@@ -2,6 +2,8 @@ import React from 'react';
 
 import { ReactWidget } from '@jupyterlab/apputils';
 
+import { ToneAudioNode } from 'tone';
+
 import { Meter as RMeter, MeterOrientation } from '../components';
 
 export class Meter extends ReactWidget {
@@ -11,6 +13,7 @@ export class Meter extends ReactWidget {
   constructor(options: Meter.IOptions) {
     super();
     this.addClass('jp-daw-Meter');
+    this.inputNode = options.inputNode;
     this.width = options.width;
     this.height = options.height;
     this.orientation = options.orientation || 'vertical';
@@ -18,6 +21,7 @@ export class Meter extends ReactWidget {
     this.thresholdValue = options.thresholdValue || 0.01;
   }
 
+  readonly inputNode: ToneAudioNode;
   readonly width: number;
   readonly height: number;
   readonly orientation: MeterOrientation;
@@ -27,6 +31,7 @@ export class Meter extends ReactWidget {
   render(): JSX.Element {
     return (
       <RMeter
+        inputNode={this.inputNode}
         width={this.width}
         height={this.height}
         orientation={this.orientation}
@@ -39,6 +44,7 @@ export class Meter extends ReactWidget {
 
 export namespace Meter {
   export interface IOptions {
+    inputNode: ToneAudioNode;
     width: number;
     height: number;
     orientation?: MeterOrientation;

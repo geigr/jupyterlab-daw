@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useCallback, useEffect, useRef } from 'react';
 
 import { Meter as ToneMeter, getDestination } from 'tone';
 
@@ -44,7 +44,7 @@ export const Meter: React.FC<MeterProps> = ({
     };
   }, []);
 
-  const render = (ctx: CanvasRenderingContext2D) => {
+  const render = useCallback((ctx: CanvasRenderingContext2D) => {
     const root = getComputedStyle(document.documentElement);
     ctx.clearRect(0, 0, width, height);
 
@@ -68,7 +68,7 @@ export const Meter: React.FC<MeterProps> = ({
       ctx.fillRect(0, height, width / 2, -levelL);
       ctx.fillRect(width / 2, height, width, -levelR);
     }
-  };
+  }, []);
 
   useAnimationFrame(() => {
     if (canvasRef.current) {

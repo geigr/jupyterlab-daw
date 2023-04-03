@@ -5,6 +5,7 @@ import {
   UseSignal
 } from '@jupyterlab/apputils';
 
+import { CommandRegistry } from '@lumino/commands';
 import { Widget } from '@lumino/widgets';
 
 import React from 'react';
@@ -13,13 +14,13 @@ import { getDestination } from 'tone';
 
 import { Meter } from './meter';
 import { speakerIcon, muteIcon } from '../iconimports';
-import { IDawExtension } from '../tokens';
+import { CommandIDs, IDawExtension } from '../tokens';
 
 const TOPBAR_CLASS = 'jp-daw-TopBar';
 const CONTENT_CLASS = 'jp-daw-TopBar-item';
 
 export class TopBar extends Toolbar<Widget> {
-  constructor(model: IDawExtension) {
+  constructor(model: IDawExtension, commands: CommandRegistry) {
     super();
     this._model = model;
     this.addClass(TOPBAR_CLASS);
@@ -43,7 +44,7 @@ export class TopBar extends Toolbar<Widget> {
             tooltip={'mute'}
             pressedTooltip={'unmute'}
             onClick={() => {
-              this._model.toggleMuteDestination();
+              commands.execute(CommandIDs.dawToggleDestinationMute);
             }}
           />
         )}

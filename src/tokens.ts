@@ -26,3 +26,10 @@ export interface IDawExtension extends IDisposable {
    */
   toggleMuteDestination(): void;
 }
+
+/**
+ * The command IDs used by the daw plugin.
+ */
+export enum CommandIDs {
+  dawToggleDestinationMute = 'daw:toggle-main-mute'
+}

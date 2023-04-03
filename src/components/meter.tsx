@@ -30,7 +30,7 @@ export const Meter: React.FC<MeterProps> = ({
     new ToneMeter({ normalRange: true, channels: 2 })
   );
   const canvasRef = useRef<HTMLCanvasElement>(null);
-  const colorRef = useRef<string>("");
+  const colorRef = useRef<string>('');
 
   useEffect(() => {
     // TODO: make color a property instead

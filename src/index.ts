@@ -2,9 +2,11 @@ import {
   JupyterFrontEnd,
   JupyterFrontEndPlugin
 } from '@jupyterlab/application';
+import { ICommandPalette } from '@jupyterlab/apputils';
 
 import { TopBar } from './widgets';
 
+import { addCommands } from './commands';
 import { DawExtension } from './model';
 import { IDawExtension } from './tokens';
 
@@ -16,12 +18,14 @@ export { IDawExtension } from './tokens';
 const plugin: JupyterFrontEndPlugin<IDawExtension> = {
   id: 'jupyterlab-daw:plugin',
   autoStart: true,
-  requires: [],
+  requires: [ICommandPalette],
   provides: IDawExtension,
-  activate: (app: JupyterFrontEnd): IDawExtension => {
+  activate: (app: JupyterFrontEnd, palette: ICommandPalette): IDawExtension => {
     const dawExtension = new DawExtension();
 
-    const topBar = new TopBar(dawExtension);
+    addCommands(app, palette, dawExtension);
+
+    const topBar = new TopBar(dawExtension, app.commands);
     topBar.id = 'jp-daw-topbar';
     app.shell.add(topBar, 'top', { rank: 1000 });
 

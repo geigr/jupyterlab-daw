@@ -30,6 +30,13 @@ export const Meter: React.FC<MeterProps> = ({
     new ToneMeter({ normalRange: true, channels: 2 })
   );
   const canvasRef = useRef<HTMLCanvasElement>(null);
+  const colorRef = useRef<string>("");
+
+  useEffect(() => {
+    // TODO: make color a property instead
+    const root = getComputedStyle(document.documentElement);
+    colorRef.current = root.getPropertyValue('--jp-brand-color1');
+  });
 
   useEffect(() => {
     const meter = meterRef.current;
@@ -56,7 +63,6 @@ export const Meter: React.FC<MeterProps> = ({
 
   const render = useCallback(
     (ctx: CanvasRenderingContext2D) => {
-      const root = getComputedStyle(document.documentElement);
       ctx.clearRect(0, 0, width, height);
 
       const valueLR = meterRef.current.getValue() as number[];
@@ -66,11 +72,10 @@ export const Meter: React.FC<MeterProps> = ({
         return;
       }
 
-      const levelL = Math.pow(valueLR[0], 0.5) * width;
-      const levelR = Math.pow(valueLR[1], 0.5) * width;
+      const levelL = Math.round(Math.pow(valueLR[0], 0.5) * width);
+      const levelR = Math.round(Math.pow(valueLR[1], 0.5) * width);
 
-      const color = root.getPropertyValue('--jp-brand-color1');
-      ctx.fillStyle = color;
+      ctx.fillStyle = colorRef.current;
 
       if (orientation === 'horizontal') {
         ctx.fillRect(0, 0, levelL, height / 2);

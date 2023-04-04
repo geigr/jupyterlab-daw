@@ -10,9 +10,12 @@ export type MeterProps = {
   inputNode: ToneAudioNode;
   width: number;
   height: number;
+  color1?: string;
+  color2?: string;
   orientation?: MeterOrientation;
   fps?: number;
   thresholdValue?: number;
+  enabled?: boolean;
 };
 
 /**
@@ -22,21 +25,38 @@ export const Meter: React.FC<MeterProps> = ({
   inputNode,
   width,
   height,
+  color1 = 'lime',
+  color2 = 'red',
   orientation = 'vertical',
   fps = 30,
-  thresholdValue = 0.01
+  thresholdValue = 0.01,
+  enabled = true
 }): JSX.Element => {
   const meterRef = useRef<ToneMeter>(
     new ToneMeter({ normalRange: true, channels: 2 })
   );
   const canvasRef = useRef<HTMLCanvasElement>(null);
-  const colorRef = useRef<string>('');
+  const gradientRef = useRef<CanvasGradient | string>('lime');
 
   useEffect(() => {
-    // TODO: make color a property instead
-    const root = getComputedStyle(document.documentElement);
-    colorRef.current = root.getPropertyValue('--jp-brand-color1');
-  });
+    if (canvasRef.current) {
+      const ctx = canvasRef.current.getContext('2d');
+      if (ctx) {
+        let grd: CanvasGradient;
+        if (orientation === 'horizontal') {
+          grd = ctx.createLinearGradient(0, 0, width, 0);
+        } else {
+          grd = ctx.createLinearGradient(0, 0, 0, height);
+        }
+
+        grd.addColorStop(0, color1);
+        grd.addColorStop(0.5, color1);
+        grd.addColorStop(1, color2);
+
+        gradientRef.current = grd;
+      }
+    }
+  }, [width, height, color1, color2, orientation]);
 
   useEffect(() => {
     const meter = meterRef.current;
@@ -54,12 +74,16 @@ export const Meter: React.FC<MeterProps> = ({
 
   useEffect(() => {
     const meter = meterRef.current;
-    inputNode.connect(meter);
+    if (enabled) {
+      inputNode.connect(meter);
+    }
 
     return () => {
-      inputNode.disconnect(meter);
+      if (enabled) {
+        inputNode.disconnect(meter);
+      }
     };
-  }, [inputNode]);
+  }, [inputNode, enabled, fps]);
 
   const render = useCallback(
     (ctx: CanvasRenderingContext2D) => {
@@ -75,7 +99,7 @@ export const Meter: React.FC<MeterProps> = ({
       const levelL = Math.round(Math.pow(valueLR[0], 0.5) * width);
       const levelR = Math.round(Math.pow(valueLR[1], 0.5) * width);
 
-      ctx.fillStyle = colorRef.current;
+      ctx.fillStyle = gradientRef.current;
 
       if (orientation === 'horizontal') {
         ctx.fillRect(0, 0, levelL, height / 2);
@@ -88,14 +112,18 @@ export const Meter: React.FC<MeterProps> = ({
     [width, height, orientation, thresholdValue]
   );
 
-  useAnimationFrame(() => {
-    if (canvasRef.current) {
-      const context = canvasRef.current.getContext('2d');
-      if (context) {
-        render(context);
+  useAnimationFrame(
+    () => {
+      if (canvasRef.current) {
+        const context = canvasRef.current.getContext('2d');
+        if (context) {
+          render(context);
+        }
       }
-    }
-  }, fps);
+    },
+    fps,
+    enabled
+  );
 
   return (
     <div>

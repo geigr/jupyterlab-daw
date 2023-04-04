@@ -12,7 +12,7 @@ import React from 'react';
 
 import { getDestination } from 'tone';
 
-import { Meter } from './meter';
+import { Meter } from '../components/meter';
 import { speakerIcon, muteIcon } from '../iconimports';
 import { CommandIDs, IDawExtension } from '../tokens';
 
@@ -25,13 +25,22 @@ export class TopBar extends Toolbar<Widget> {
     this._model = model;
     this.addClass(TOPBAR_CLASS);
 
-    const meter = new Meter({
-      inputNode: getDestination(),
-      width: 60,
-      height: 23,
-      fps: 20,
-      orientation: 'horizontal'
-    });
+    const meter = ReactWidget.create(
+      <UseSignal signal={model.destinationChanged}>
+        {() => (
+          <Meter
+            inputNode={getDestination()}
+            width={60}
+            height={23}
+            fps={20}
+            orientation={'horizontal'}
+            enabled={!this._model.destinationMute}
+          />
+        )}
+      </UseSignal>
+    );
+
+    meter.addClass('jp-daw-Meter');
     this.addItem('jp-daw-topbar-meter', meter);
 
     const toggleMute = ReactWidget.create(
@@ -50,6 +59,7 @@ export class TopBar extends Toolbar<Widget> {
         )}
       </UseSignal>
     );
+
     this.addItem('jp-daw-topbar-toggle-mute', toggleMute);
   }
 

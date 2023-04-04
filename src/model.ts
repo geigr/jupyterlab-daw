@@ -1,6 +1,6 @@
 import { ISignal, Signal } from '@lumino/signaling';
 
-import { getDestination } from 'tone';
+import { getDestination, getTransport } from 'tone';
 
 import { IDawExtension } from './tokens';
 
@@ -30,6 +30,36 @@ export class DawExtension implements IDawExtension {
   }
 
   /**
+   * A signal emitted whenever the state of Tonejs Transport
+   * changes.
+   */
+  get transportChanged(): ISignal<IDawExtension, void> {
+    return this._transportChanged;
+  }
+
+  /**
+   * Start Tone transport
+   */
+  transportStart(): void {
+    const transport = getTransport();
+    if (transport.state !== "started") {
+      transport.start();
+      this._transportChanged.emit();
+    }
+  }
+
+  /**
+   * Stop Tone transport
+   */
+  transportStop(): void {
+    const transport = getTransport();
+    if (transport.state !== "stopped") {
+      transport.stop();
+      this._transportChanged.emit();
+    }
+  }
+
+  /**
    * Boolean indicating whether the model has been disposed.
    */
   get isDisposed(): boolean {
@@ -48,4 +78,5 @@ export class DawExtension implements IDawExtension {
 
   private _isDisposed = false;
   private _destinationChanged = new Signal<IDawExtension, void>(this);
+  private _transportChanged = new Signal<IDawExtension, void>(this);
 }

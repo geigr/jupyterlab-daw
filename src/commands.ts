@@ -19,4 +19,26 @@ export function addCommands(
     command: CommandIDs.dawToggleDestinationMute,
     category: 'DAW'
   });
+
+  /** Start transport. */
+  app.commands.addCommand(CommandIDs.dawTransportStart, {
+    label: 'Start Transport',
+    execute: () => dawModel.transportStart()
+  });
+
+  palette.addItem({
+    command: CommandIDs.dawTransportStart,
+    category: 'DAW'
+  });
+
+  /** Stop transport. */
+  app.commands.addCommand(CommandIDs.dawTransportStop, {
+    label: 'Stop Transport',
+    execute: () => dawModel.transportStop()
+  });
+
+  palette.addItem({
+    command: CommandIDs.dawTransportStop,
+    category: 'DAW'
+  });
 }

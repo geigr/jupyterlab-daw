@@ -25,11 +25,30 @@ export interface IDawExtension extends IDisposable {
    * emitting a signal.
    */
   toggleMuteDestination(): void;
+
+  /**
+   * A signal emitted whenever the state of Tonejs Transport
+   * changes.
+   */
+  readonly transportChanged: ISignal<IDawExtension, void>;
+
+  /**
+   * Start Tone transport
+   */
+  transportStart(): void;
+
+  /**
+   * Stop Tone transport
+   */
+  transportStop(): void;
+
 }
 
 /**
  * The command IDs used by the daw plugin.
  */
 export enum CommandIDs {
-  dawToggleDestinationMute = 'daw:toggle-main-mute'
+  dawToggleDestinationMute = 'daw:toggle-main-mute',
+  dawTransportStart = 'daw:transport-start',
+  dawTransportStop = 'daw:transport-stop'
 }

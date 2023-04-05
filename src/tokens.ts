@@ -41,7 +41,6 @@ export interface IDawExtension extends IDisposable {
    * Stop Tone transport
    */
   transportStop(): void;
-
 }
 
 /**

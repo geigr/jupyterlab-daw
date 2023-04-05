@@ -42,7 +42,7 @@ export class DawExtension implements IDawExtension {
    */
   transportStart(): void {
     const transport = getTransport();
-    if (transport.state !== "started") {
+    if (transport.state !== 'started') {
       transport.start();
       this._transportChanged.emit();
     }
@@ -53,7 +53,7 @@ export class DawExtension implements IDawExtension {
    */
   transportStop(): void {
     const transport = getTransport();
-    if (transport.state !== "stopped") {
+    if (transport.state !== 'stopped') {
       transport.stop();
       this._transportChanged.emit();
     }

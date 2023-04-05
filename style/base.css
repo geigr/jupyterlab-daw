@@ -4,6 +4,17 @@
     https://jupyterlab.readthedocs.io/en/stable/developer/css.html
 */
 
+.jp-daw-TransportPosition {
+  background-color: var(--jp-layout-color2);
+  font-weight: bold;
+}
+
+.jp-daw-TransportPosition > div {
+  padding: 0 10px;
+  font-family: var(--jp-code-font-family-default);
+  color: var(--jp-ui-font-color2);
+}
+
 .jp-daw-Meter {
   background-color: var(--jp-layout-color2);
 }
@@ -26,6 +37,10 @@
   display: flex;
   flex-direction: column;
   justify-content: left;
+  margin-left: 2px;
+  line-height: calc(
+    var(--jp-private-menubar-height) - var(--jp-border-width)
+  ) !important;
 }
 
 .jp-Toolbar.jp-daw-TopBar {

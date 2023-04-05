@@ -13,6 +13,7 @@ import React from 'react';
 import { getDestination } from 'tone';
 
 import { Meter } from '../components/meter';
+import { TransportPosition } from '../components/transport';
 import { speakerIcon, muteIcon } from '../iconimports';
 import { CommandIDs, IDawExtension } from '../tokens';
 
@@ -24,6 +25,10 @@ export class TopBar extends Toolbar<Widget> {
     super();
     this._model = model;
     this.addClass(TOPBAR_CLASS);
+
+    const transportPosition = ReactWidget.create(<TransportPosition />);
+    transportPosition.addClass('jp-daw-TransportPosition');
+    this.addItem('jp-daw-topbar-transport-position', transportPosition);
 
     const meter = ReactWidget.create(
       <UseSignal signal={model.destinationChanged}>

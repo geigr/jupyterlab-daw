@@ -10,9 +10,14 @@
 }
 
 .jp-daw-TransportPosition > div {
-  padding: 0 10px;
+  width: 6em;
+  text-align: center;
   font-family: var(--jp-code-font-family-default);
   color: var(--jp-ui-font-color2);
+}
+
+.jp-daw-TransportPosition > div[contenteditable='true'] {
+  color: var(--jp-ui-font-color1);
 }
 
 .jp-daw-Meter {

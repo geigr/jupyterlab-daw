@@ -31,6 +31,17 @@ export function addCommands(
     category: 'DAW'
   });
 
+  /** Pause transport. */
+  app.commands.addCommand(CommandIDs.dawTransportPause, {
+    label: 'Pause Transport',
+    execute: () => dawModel.transportPause()
+  });
+
+  palette.addItem({
+    command: CommandIDs.dawTransportPause,
+    category: 'DAW'
+  });
+
   /** Stop transport. */
   app.commands.addCommand(CommandIDs.dawTransportStop, {
     label: 'Stop Transport',

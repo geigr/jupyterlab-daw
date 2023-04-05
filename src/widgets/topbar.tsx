@@ -14,7 +14,13 @@ import { getDestination } from 'tone';
 
 import { Meter } from '../components/meter';
 import { TransportPosition } from '../components/transport';
-import { speakerIcon, muteIcon } from '../iconimports';
+import {
+  speakerIcon,
+  muteIcon,
+  playIcon,
+  stopIcon,
+  pauseIcon
+} from '../iconimports';
 import { CommandIDs, IDawExtension } from '../tokens';
 
 const TOPBAR_CLASS = 'jp-daw-TopBar';
@@ -26,7 +32,53 @@ export class TopBar extends Toolbar<Widget> {
     this._model = model;
     this.addClass(TOPBAR_CLASS);
 
-    const transportPosition = ReactWidget.create(<TransportPosition />);
+    const playButton = ReactWidget.create(
+      <UseSignal signal={model.transportChanged}>
+        {() => (
+          <ToolbarButtonComponent
+            icon={playIcon}
+            pressedIcon={pauseIcon}
+            pressed={model.transportState === 'started'}
+            tooltip={'start transport'}
+            pressedTooltip={'pause transport'}
+            onClick={() => {
+              if (model.transportState === 'started') {
+                commands.execute(CommandIDs.dawTransportPause);
+              } else {
+                commands.execute(CommandIDs.dawTransportStart);
+              }
+            }}
+          />
+        )}
+      </UseSignal>
+    );
+
+    this.addItem('jp-daw-topbar-play', playButton);
+
+    const stopButton = ReactWidget.create(
+      <UseSignal signal={model.transportChanged}>
+        {() => (
+          <ToolbarButtonComponent
+            icon={stopIcon}
+            tooltip={'stop transport'}
+            onClick={() => {
+              commands.execute(CommandIDs.dawTransportStop);
+            }}
+          />
+        )}
+      </UseSignal>
+    );
+
+    this.addItem('jp-daw-topbar-stop', stopButton);
+
+    const transportPosition = ReactWidget.create(
+      <UseSignal signal={model.transportChanged}>
+        {() => (
+          <TransportPosition editable={model.transportState !== 'started'} />
+        )}
+      </UseSignal>
+    );
+
     transportPosition.addClass('jp-daw-TransportPosition');
     this.addItem('jp-daw-topbar-transport-position', transportPosition);
 
@@ -48,7 +100,7 @@ export class TopBar extends Toolbar<Widget> {
     meter.addClass('jp-daw-Meter');
     this.addItem('jp-daw-topbar-meter', meter);
 
-    const toggleMute = ReactWidget.create(
+    const toggleMuteButton = ReactWidget.create(
       <UseSignal signal={model.destinationChanged}>
         {() => (
           <ToolbarButtonComponent
@@ -65,7 +117,7 @@ export class TopBar extends Toolbar<Widget> {
       </UseSignal>
     );
 
-    this.addItem('jp-daw-topbar-toggle-mute', toggleMute);
+    this.addItem('jp-daw-topbar-toggle-mute', toggleMuteButton);
   }
 
   addItem(name: string, item: Widget): boolean {

@@ -1,6 +1,6 @@
 import { ISignal, Signal } from '@lumino/signaling';
 
-import { getDestination, getTransport } from 'tone';
+import { getDestination, getTransport, start } from 'tone';
 
 import { IDawExtension } from './tokens';
 
@@ -38,12 +38,33 @@ export class DawExtension implements IDawExtension {
   }
 
   /**
+   * Current Tonejs transport state
+   */
+  get transportState(): 'started' | 'stopped' | 'paused' {
+    return getTransport().state;
+  }
+
+  /**
    * Start Tone transport
    */
   transportStart(): void {
     const transport = getTransport();
     if (transport.state !== 'started') {
+      // start transport inactive if context not started
+      start();
+
       transport.start();
+      this._transportChanged.emit();
+    }
+  }
+
+  /**
+   * Pause Tone transport
+   */
+  transportPause(): void {
+    const transport = getTransport();
+    if (transport.state === 'started') {
+      transport.pause();
       this._transportChanged.emit();
     }
   }

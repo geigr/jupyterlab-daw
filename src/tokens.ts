@@ -33,9 +33,19 @@ export interface IDawExtension extends IDisposable {
   readonly transportChanged: ISignal<IDawExtension, void>;
 
   /**
+   * Current Tonejs transport state
+   */
+  readonly transportState: 'started' | 'stopped' | 'paused';
+
+  /**
    * Start Tone transport
    */
   transportStart(): void;
+
+  /**
+   * Pause Tone transport
+   */
+  transportPause(): void;
 
   /**
    * Stop Tone transport
@@ -49,5 +59,6 @@ export interface IDawExtension extends IDisposable {
 export enum CommandIDs {
   dawToggleDestinationMute = 'daw:toggle-main-mute',
   dawTransportStart = 'daw:transport-start',
+  dawTransportPause = 'daw:transport-pause',
   dawTransportStop = 'daw:transport-stop'
 }

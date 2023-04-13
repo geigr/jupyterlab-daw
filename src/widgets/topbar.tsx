@@ -87,10 +87,10 @@ export class TopBar extends Toolbar<Widget> {
         {() => (
           <Meter
             inputNode={getDestination()}
-            width={60}
+            width={16}
             height={23}
             fps={20}
-            orientation={'horizontal'}
+            orientation={'vertical'}
             enabled={!this._model.destinationMute}
           />
         )}

@@ -37,6 +37,7 @@ export const Meter: React.FC<MeterProps> = ({
   );
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const gradientRef = useRef<CanvasGradient | string>('lime');
+  const extentRef = useRef<number>(width);
 
   useEffect(() => {
     if (canvasRef.current) {
@@ -46,7 +47,7 @@ export const Meter: React.FC<MeterProps> = ({
         if (orientation === 'horizontal') {
           grd = ctx.createLinearGradient(0, 0, width, 0);
         } else {
-          grd = ctx.createLinearGradient(0, 0, 0, height);
+          grd = ctx.createLinearGradient(0, height, 0, 0);
         }
 
         grd.addColorStop(0, color1);
@@ -55,6 +56,12 @@ export const Meter: React.FC<MeterProps> = ({
 
         gradientRef.current = grd;
       }
+    }
+
+    if (orientation === 'horizontal') {
+      extentRef.current = width;
+    } else {
+      extentRef.current = height;
     }
   }, [width, height, color1, color2, orientation]);
 
@@ -96,8 +103,9 @@ export const Meter: React.FC<MeterProps> = ({
         return;
       }
 
-      const levelL = Math.round(Math.pow(valueLR[0], 0.5) * width);
-      const levelR = Math.round(Math.pow(valueLR[1], 0.5) * width);
+      const extent = extentRef.current;
+      const levelL = Math.round(Math.pow(valueLR[0], 0.2) * extent);
+      const levelR = Math.round(Math.pow(valueLR[1], 0.2) * extent);
 
       ctx.fillStyle = gradientRef.current;
 

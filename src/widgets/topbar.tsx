@@ -74,7 +74,7 @@ export class TopBar extends Toolbar<Widget> {
     const transportPosition = ReactWidget.create(
       <UseSignal signal={model.transportChanged}>
         {() => (
-          <TransportPosition editable={model.transportState !== 'started'} />
+          <TransportPosition disabled={model.transportState === 'started'} />
         )}
       </UseSignal>
     );

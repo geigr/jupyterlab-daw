@@ -5,7 +5,7 @@ import { getTransport } from 'tone';
 import { useTransportDraw } from '../util/draw';
 
 export type TransportPositionProps = {
-  editable?: boolean;
+  disabled?: boolean;
 };
 
 function getTransportPosition(): string {
@@ -14,23 +14,41 @@ function getTransportPosition(): string {
 }
 
 export const TransportPosition: React.FC<TransportPositionProps> = ({
-  editable = false
+  disabled = false
 }): JSX.Element => {
   const [position, setPosition] = useState<string>(getTransportPosition());
 
-  // force updating position when the component is re-rendered
+  // update position input value when transport is stopped
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(() => {
-    setPosition(getTransportPosition());
-  }, [editable]);
+    if (getTransport().state === 'stopped') {
+      setPosition(getTransportPosition());
+    }
+  });
 
   const setPositionClb = useCallback(() => {
-    const pos = getTransportPosition();
-    if (pos !== position) {
-      setPosition(pos);
-    }
+    setPosition(getTransportPosition());
   }, []);
 
   useTransportDraw(setPositionClb, '4n');
 
-  return <div contentEditable={editable}>{position}</div>;
+  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setPosition(event.target.value);
+  };
+
+  const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
+    if (event.key === 'Enter') {
+      getTransport().position = position;
+    }
+  };
+
+  return (
+    <input
+      type="text"
+      disabled={disabled}
+      value={position}
+      onChange={handleChange}
+      onKeyDown={handleKeyDown}
+    />
+  );
 };

@@ -9,14 +9,22 @@
   text-align: center;
   font-family: var(--jp-code-font-family-default);
   color: var(--jp-ui-font-color1);
+  background-color: var(--jp-layout-color1);
+  border: var(--jp-border-width) solid var(--jp-layout-color4);
+  border-radius: var(--jp-border-radius);
+  height: 100%;
+  font-size: 14px;
 }
 
 .jp-daw-TransportPosition > input:disabled {
   color: var(--jp-ui-font-color2);
 }
 
-.jp-daw-Meter {
+.jp-daw-Meter > div {
   background-color: var(--jp-layout-color2);
+  border: var(--jp-border-width) solid var(--jp-layout-color4);
+  border-radius: var(--jp-border-radius);
+  height: 21px;
 }
 
 .jp-daw-TopBar {

@@ -19,7 +19,7 @@ export const useAnimationFrame = (
   const animate = useCallback(() => {
     const now = performance.now();
     const delta = now - prevRef.current;
-    if (prevRef.current === -1 || delta > 1000 / fps) {
+    if (prevRef.current === -1 || delta >= 1000 / fps) {
       callback();
       prevRef.current = now;
     }

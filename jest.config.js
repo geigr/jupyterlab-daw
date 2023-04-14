@@ -27,6 +27,7 @@ module.exports = {
   setupFilesAfterEnv,
   setupFiles,
   testPathIgnorePatterns,
+  modulePathIgnorePatterns: ['<rootDir>/build', '<rootDir>/jupyterlab_daw'],
   transform,
   automock: false,
   collectCoverageFrom: [

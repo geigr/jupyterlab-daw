@@ -1,3 +1,10 @@
+var tsConfig = require('./tsconfig.json');
+
+var tsOptions = tsConfig['compilerOptions'];
+// Need as the __mocks__ folder is not visible from the src folder
+tsOptions['rootDir'] = null;
+tsOptions['inlineSourceMap'] = true;
+
 const jestJupyterLab = require('@jupyterlab/testutils/lib/jest-config');
 
 const esModules = [
@@ -29,6 +36,7 @@ module.exports = {
   testPathIgnorePatterns,
   modulePathIgnorePatterns: ['<rootDir>/build', '<rootDir>/jupyterlab_daw'],
   transform,
+  unmockedModulePathPatterns: ['<rootDir/node_modules/tone'],
   automock: false,
   collectCoverageFrom: [
     'src/**/*.{ts,tsx}',
@@ -39,7 +47,7 @@ module.exports = {
   coverageReporters: ['lcov', 'text'],
   globals: {
     'ts-jest': {
-      tsconfig: 'tsconfig.json'
+      tsconfig: tsOptions
     }
   },
   testRegex: 'src/.*/.*.spec.ts[x]?$',

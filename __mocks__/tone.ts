@@ -1,6 +1,20 @@
 import 'jest';
 
-export const transportMock = {
+export const start = jest.fn();
+
+export const Destination = {
+  mute: false
+};
+
+export function getDestination() {
+  return Destination;
+}
+
+export const Transport = {
+  state: 'stopped',
+  start: jest.fn(),
+  pause: jest.fn(),
+  stop: jest.fn(),
   scheduleRepeat: jest
     .fn()
     .mockImplementation(
@@ -12,16 +26,21 @@ export const transportMock = {
   clear: jest.fn()
 };
 
-export const drawMock = {
+Object.defineProperty(Transport, 'position', {
+  get: jest.fn(() => '0:0:0'),
+  set: jest.fn()
+});
+
+export function getTransport() {
+  return Transport;
+}
+
+export const Draw = {
   schedule: jest.fn().mockImplementation((clb: { (): void }, _: any) => {
     clb();
   })
 };
 
-export function getTransport() {
-  return transportMock;
-}
-
 export function getDraw() {
-  return drawMock;
+  return Draw;
 }

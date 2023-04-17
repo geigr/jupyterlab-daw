@@ -18,9 +18,9 @@ export { IDawExtension } from './tokens';
 const plugin: JupyterFrontEndPlugin<IDawExtension> = {
   id: 'jupyterlab-daw:plugin',
   autoStart: true,
-  requires: [ICommandPalette],
+  optional: [ICommandPalette],
   provides: IDawExtension,
-  activate: (app: JupyterFrontEnd, palette: ICommandPalette): IDawExtension => {
+  activate: (app: JupyterFrontEnd, palette: ICommandPalette | null): IDawExtension => {
     const dawExtension = new DawExtension();
 
     addCommands(app, palette, dawExtension);

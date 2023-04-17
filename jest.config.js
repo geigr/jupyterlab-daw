@@ -9,6 +9,7 @@ const jestJupyterLab = require('@jupyterlab/testutils/lib/jest-config');
 
 const esModules = [
   '@jupyterlab/',
+  '@jupyter/ydoc',
   'lib0',
   'y\\-protocols',
   'y\\-websocket',
@@ -32,7 +33,7 @@ module.exports = {
   moduleNameMapper,
   preset,
   setupFilesAfterEnv,
-  setupFiles,
+  setupFiles: [...setupFiles, '<rootDir>/testutils/jest-setup-files.js'],
   testPathIgnorePatterns,
   modulePathIgnorePatterns: ['<rootDir>/build', '<rootDir>/jupyterlab_daw'],
   transform,

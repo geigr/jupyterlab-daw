@@ -10,7 +10,7 @@ describe('DawExtension', () => {
 
   beforeEach(async () => {
     model = new DawExtension();
-  })
+  });
 
   afterEach(() => {
     jest.clearAllMocks();
@@ -29,62 +29,76 @@ describe('DawExtension', () => {
       await testSignal;
       expect(model.destinationMute).toBe(true);
       expect(model.destinationMute).toEqual(getDestination().mute);
-    })
-  })
+    });
+  });
 
   describe('transport state', () => {
     it('should correspond to tonejs state', () => {
-
-      Object.assign(getTransport(), {state: 'stopped'});
+      Object.assign(getTransport(), { state: 'stopped' });
       expect(model.transportState).toEqual('stopped');
 
-      Object.assign(getTransport(), {state: 'started'});
+      Object.assign(getTransport(), { state: 'started' });
       expect(model.transportState).toEqual('started');
     });
 
     it.each([
-      ['started', 'stopped', () => model.transportStart(), getTransport().start],
+      [
+        'started',
+        'stopped',
+        () => model.transportStart(),
+        getTransport().start
+      ],
       ['paused', 'started', () => model.transportPause(), getTransport().pause],
       ['stopped', 'started', () => model.transportStop(), getTransport().stop]
-    ])('should emit a transportChanged signal when actually %p', async (
-      testState: string,
-      initState: string,
-      modelFunc: {(): void},
-      toneFunc: {(): void}
-    ) => {
-      const testSignal = testEmission(model.transportChanged, {
-        test: (_, args) => {
-          expect(args).toBeUndefined();
+    ])(
+      'should emit a transportChanged signal when actually %p',
+      async (
+        testState: string,
+        initState: string,
+        modelFunc: { (): void },
+        toneFunc: { (): void }
+      ) => {
+        const testSignal = testEmission(model.transportChanged, {
+          test: (_, args) => {
+            expect(args).toBeUndefined();
+          }
+        });
+
+        // ensure mocked transport is set in the given initial state
+        Object.assign(getTransport(), { state: initState });
+
+        modelFunc();
+        await testSignal;
+        if (testState === 'started') {
+          expect(start).toBeCalled();
         }
-      });
-
-      // ensure mocked transport is set in the given initial state
-      Object.assign(getTransport(), {state: initState});
-
-      modelFunc();
-      await testSignal;
-      if (testState === 'started') {
-        expect(start).toBeCalled();
+        expect(toneFunc).toBeCalled();
       }
-      expect(toneFunc).toBeCalled();
-    });
-
+    );
 
     it.each([
-      ['started', 'started', () => model.transportStart(), getTransport().start],
+      [
+        'started',
+        'started',
+        () => model.transportStart(),
+        getTransport().start
+      ],
       ['paused', 'stopped', () => model.transportPause(), getTransport().pause],
       ['stopped', 'stopped', () => model.transportStop(), getTransport().stop]
-    ])('should not change state to %p (and emit signal) when not needed', async (
-      _: string,
-      initState: string,
-      modelFunc: {(): void},
-      toneFunc: {(): void}
-    ) => {
-      // ensure mocked transport is set in the given initial state
-      Object.assign(getTransport(), {state: initState});
+    ])(
+      'should not change state to %p (and emit signal) when not needed',
+      async (
+        _: string,
+        initState: string,
+        modelFunc: { (): void },
+        toneFunc: { (): void }
+      ) => {
+        // ensure mocked transport is set in the given initial state
+        Object.assign(getTransport(), { state: initState });
 
-      modelFunc();
-      expect(toneFunc).not.toBeCalled();
-    });
+        modelFunc();
+        expect(toneFunc).not.toBeCalled();
+      }
+    );
   });
 });

@@ -1,0 +1,23 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Meter rendered canvas matches snapshot 1`] = `
+Array [
+  Object {
+    "props": Object {
+      "x0": 0,
+      "x1": 0,
+      "y0": 20,
+      "y1": 0,
+    },
+    "transform": Array [
+      1,
+      0,
+      0,
+      1,
+      0,
+      0,
+    ],
+    "type": "createLinearGradient",
+  },
+]
+`;

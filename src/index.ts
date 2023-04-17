@@ -20,7 +20,10 @@ const plugin: JupyterFrontEndPlugin<IDawExtension> = {
   autoStart: true,
   optional: [ICommandPalette],
   provides: IDawExtension,
-  activate: (app: JupyterFrontEnd, palette: ICommandPalette | null): IDawExtension => {
+  activate: (
+    app: JupyterFrontEnd,
+    palette: ICommandPalette | null
+  ): IDawExtension => {
     const dawExtension = new DawExtension();
 
     addCommands(app, palette, dawExtension);

@@ -2,6 +2,18 @@ import 'jest';
 
 export const start = jest.fn();
 
+export class ToneAudioNode {
+  connect = jest.fn();
+  disconnect = jest.fn();
+  dispose = jest.fn();
+}
+
+export class Gain extends ToneAudioNode {}
+
+export class Meter extends ToneAudioNode {
+  getValue = jest.fn(() => 1.0);
+}
+
 export const Destination = {
   mute: false
 };

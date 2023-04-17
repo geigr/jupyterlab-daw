@@ -1,5 +1,5 @@
 import 'jest';
-import { renderHook } from '@testing-library/react';
+import { renderHook } from '@testing-library/react-hooks';
 import { getTransport } from 'tone';
 
 import { useTransportDraw } from '../draw';

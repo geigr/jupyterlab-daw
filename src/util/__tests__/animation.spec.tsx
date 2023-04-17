@@ -1,5 +1,5 @@
 import 'jest';
-import { act, renderHook } from '@testing-library/react';
+import { act, renderHook } from '@testing-library/react-hooks';
 
 import { useAnimationFrame } from '../animation';
 

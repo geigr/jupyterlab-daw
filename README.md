@@ -1,7 +1,16 @@
-# jupyterlab_daw
+![logo](https://user-images.githubusercontent.com/4160723/232886346-3c6df3a9-5bc5-45ea-88d2-aff2f244d077.svg)
+
+# JupyterLab-DAW
 
 [![Github Actions Status](https://github.com/benbovy/jupyterlab-daw/workflows/Build/badge.svg)](https://github.com/benbovy/jupyterlab-daw/actions/workflows/build.yml)
-JupyterLab as a Digital Audio Workstation
+
+*Audio and music in JupyterLab.*
+
+This JupyterLab extension exposes commands and widgets that should be familiar to those who are working with Digital Audio Workstations (DAWs) for editing and producing audio.
+
+All audio processing is done entirely in the front-end (browser) with the help of the [Tone.js](https://tonejs.github.io/) library. Interaction from within Python notebooks is possible via [ipytone](https://ipytone.readthedocs.io/en/latest/).
+
+**Note: this is very much work in progress (nothing much to see yet)!**
 
 ## Requirements
 

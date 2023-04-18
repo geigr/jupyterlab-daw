@@ -2,6 +2,16 @@ import 'jest';
 
 export const start = jest.fn();
 
+export class Time {
+  constructor(value: number) {
+    this._value = value;
+  }
+  toString(): string {
+    return this._value.toString();
+  }
+  _value: number;
+}
+
 export class ToneAudioNode {
   connect = jest.fn();
   disconnect = jest.fn();
@@ -22,26 +32,27 @@ export function getDestination() {
   return Destination;
 }
 
-export const Transport = {
-  state: 'stopped',
-  start: jest.fn(),
-  pause: jest.fn(),
-  stop: jest.fn(),
-  scheduleRepeat: jest
+class TransportClass {
+  state = 'stopped';
+  start = jest.fn();
+  pause = jest.fn();
+  stop = jest.fn();
+  get position(): Time {
+    return new Time(0);
+  }
+  set position(_: Time) {}
+  scheduleRepeat = jest
     .fn()
     .mockImplementation(
       (clb: { (time: number): void; interval: any }): number => {
         clb(0);
         return 0;
       }
-    ),
-  clear: jest.fn()
-};
+    );
+  clear = jest.fn();
+}
 
-Object.defineProperty(Transport, 'position', {
-  get: jest.fn(() => '0:0:0'),
-  set: jest.fn()
-});
+export const Transport = new TransportClass();
 
 export function getTransport() {
   return Transport;

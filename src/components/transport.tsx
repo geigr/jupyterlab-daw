@@ -5,7 +5,8 @@ import { getTransport } from 'tone';
 import { useTransportDraw } from '../util/draw';
 
 export type TransportPositionProps = {
-  disabled?: boolean;
+  state?: 'started' | 'stopped' | 'paused';
+  dirtyClassName?: string;
 };
 
 function getTransportPosition(): string {
@@ -14,17 +15,22 @@ function getTransportPosition(): string {
 }
 
 export const TransportPosition: React.FC<TransportPositionProps> = ({
-  disabled = false
+  state = 'stopped',
+  dirtyClassName = ''
 }): JSX.Element => {
   const [position, setPosition] = useState<string>(getTransportPosition());
+  const [dirty, setDirty] = useState<boolean>(false);
 
-  // update position input value when transport is stopped
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+  // make sure to reset the input value when transport is stopped
+  // reset dirty when transport is started or stopped
   useEffect(() => {
-    if (getTransport().state === 'stopped') {
+    if (state === 'stopped') {
       setPosition(getTransportPosition());
+      setDirty(false);
+    } else if (state === 'started') {
+      setDirty(false);
     }
-  });
+  }, [state]);
 
   const setPositionClb = useCallback(() => {
     setPosition(getTransportPosition());
@@ -33,19 +39,25 @@ export const TransportPosition: React.FC<TransportPositionProps> = ({
   useTransportDraw(setPositionClb, '4n');
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setPosition(event.target.value);
+    const value = event.target.value;
+    setPosition(value);
+    setDirty(true);
   };
 
   const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
     if (event.key === 'Enter') {
       getTransport().position = position;
+      // update input value with reformatted position
+      setPosition(getTransportPosition());
+      setDirty(false);
     }
   };
 
   return (
     <input
       type="text"
-      disabled={disabled}
+      className={dirty ? dirtyClassName : ''}
+      disabled={state === 'started'}
       value={position}
       onChange={handleChange}
       onKeyDown={handleKeyDown}

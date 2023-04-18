@@ -4,6 +4,10 @@
     https://jupyterlab.readthedocs.io/en/stable/developer/css.html
 */
 
+.jp-daw-mod-dirty {
+  border-color: var(--jp-warn-color1) !important;
+}
+
 .jp-daw-TransportPosition > input {
   width: 6em;
   text-align: center;

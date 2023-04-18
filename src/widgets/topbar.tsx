@@ -74,7 +74,10 @@ export class TopBar extends Toolbar<Widget> {
     const transportPosition = ReactWidget.create(
       <UseSignal signal={model.transportChanged}>
         {() => (
-          <TransportPosition disabled={model.transportState === 'started'} />
+          <TransportPosition
+            state={model.transportState}
+            dirtyClassName={'jp-daw-mod-dirty'}
+          />
         )}
       </UseSignal>
     );

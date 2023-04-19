@@ -50,6 +50,9 @@ class TransportClass {
       }
     );
   clear = jest.fn();
+  // Emitter implementation
+  on = jest.fn();
+  off = jest.fn();
 }
 
 export const Transport = new TransportClass();

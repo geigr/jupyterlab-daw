@@ -100,5 +100,18 @@ describe('DawExtension', () => {
         expect(toneFunc).not.toBeCalled();
       }
     );
+
+    it('should listen to Tonejs transport events', () => {
+      expect(getTransport().on).toBeCalledWith('start', expect.anything());
+      expect(getTransport().on).toBeCalledWith('pause', expect.anything());
+      expect(getTransport().on).toBeCalledWith('stop', expect.anything());
+    });
+
+    it('should stop listening to Tonejs transport events when disposed', () => {
+      model.dispose();
+      expect(getTransport().off).toBeCalledWith('start', expect.anything());
+      expect(getTransport().off).toBeCalledWith('pause', expect.anything());
+      expect(getTransport().off).toBeCalledWith('stop', expect.anything());
+    });
   });
 });

@@ -5,6 +5,17 @@ import { getDestination, getTransport, start } from 'tone';
 import { IDawExtension } from './tokens';
 
 export class DawExtension implements IDawExtension {
+  constructor() {
+    const transport = getTransport();
+
+    this._transportClb = () => {
+      this._transportChanged.emit();
+    };
+    transport.on('start', this._transportClb);
+    transport.on('pause', this._transportClb);
+    transport.on('stop', this._transportClb);
+  }
+
   /**
    * Signal emitted when the state of the destination node (speakers)
    * is changed.
@@ -88,15 +99,24 @@ export class DawExtension implements IDawExtension {
   }
 
   /**
-   * Dispose model ressources.
+   * Dispose model ressources and unbind tone signal callbacks.
    */
   dispose(): void {
     if (this.isDisposed) {
       return;
     }
+
     Signal.clearData(this);
+
+    const transport = getTransport();
+    transport.off('start', this._transportClb);
+    transport.off('pause', this._transportClb);
+    transport.off('stop', this._transportClb);
+
+    this._isDisposed = true;
   }
 
+  private _transportClb: { (): void };
   private _isDisposed = false;
   private _destinationChanged = new Signal<IDawExtension, void>(this);
   private _transportChanged = new Signal<IDawExtension, void>(this);

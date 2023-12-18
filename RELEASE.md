@@ -28,6 +28,12 @@ Make sure to clean all development files before building the package:
 jlpm clean:all
 ```
 
+Make sure to also clean up the git repository:
+
+```bash
+git clean -dfX
+```
+
 To create a Python source package (`.tar.gz`) and the binary package (`.whl`) in the `dist/` directory, do:
 
 ```bash

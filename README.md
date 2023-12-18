@@ -2,7 +2,7 @@
 
 # JupyterLab-DAW
 
-[![Github Actions Status](https://github.com/benbovy/jupyterlab-daw/workflows/Build/badge.svg)](https://github.com/benbovy/jupyterlab-daw/actions/workflows/build.yml)
+[![Github Actions Status](https://github.com/geigr/jupyterlab-daw/workflows/Build/badge.svg)](https://github.com/geigr/jupyterlab-daw/actions/workflows/build.yml)
 
 _Audio and music in JupyterLab._
 
